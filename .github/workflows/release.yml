@@ -1,0 +1,50 @@
+name: Build and Release Wheels
+
+on:
+  push:
+
+jobs:
+  build-wheels:
+    name: Build wheels on ${{ matrix.os }} (${{ matrix.platform }}-${{ matrix.arch }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: manylinux
+            arch: x86_64
+          - os: ubuntu-24.04-arm
+            platform: manylinux
+            arch: aarch64
+          - os: ubuntu-latest
+            platform: musllinux
+            arch: x86_64
+          - os: ubuntu-24.04-arm
+            platform: musllinux
+            arch: aarch64
+          - os: macos-15-intel
+            platform: macos
+            arch: x86_64
+          - os: macos-latest
+            platform: macos
+            arch: arm64
+          - os: windows-latest
+            platform: win
+            arch: AMD64
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v4.1
+        env:
+          CIBW_ARCHS: ${{ matrix.arch }}
+          CIBW_BUILD: cp311-${{ matrix.platform }}*
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: wheels-${{ matrix.platform }}-${{ matrix.arch }}
+          path: ./wheelhouse/*.whl
