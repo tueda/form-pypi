@@ -30,8 +30,9 @@ VER_gmp=6.3.0
 
 build/gmp-${VER_gmp}.tar.xz: build/.dir
 	rm -f build/gmp*.tar.xz
-	${FETCH} $@ \
-		"https://ftpmirror.gnu.org/gmp/gmp-${VER_gmp}.tar.xz" \
+	${FETCH} $@ "https://ftpmirror.gnu.org/gmp/gmp-${VER_gmp}.tar.xz" \
+		|| ${FETCH} $@ "https://ftp.gnu.org/gnu/gmp/gmp-${VER_gmp}.tar.xz" \
+		|| ${FETCH} $@ "https://gmplib.org/download/gmp/gmp-${VER_gmp}.tar.xz" \
 		|| { rm -f $@; exit 1; }
 
 gmp.done: build/gmp-${VER_gmp}.tar.xz
@@ -54,8 +55,9 @@ VER_mpfr=4.2.2
 
 build/mpfr-${VER_mpfr}.tar.xz: build/.dir
 	rm -f build/mpfr*.tar.xz
-	${FETCH} $@ \
-		"https://ftpmirror.gnu.org/mpfr/mpfr-${VER_mpfr}.tar.xz" \
+	${FETCH} $@ "https://ftpmirror.gnu.org/mpfr/mpfr-${VER_mpfr}.tar.xz" \
+		|| ${FETCH} $@ "https://ftp.gnu.org/gnu/mpfr/mpfr-${VER_mpfr}.tar.xz" \
+		|| ${FETCH} $@ "https://www.mpfr.org/mpfr-${VER_mpfr}/mpfr-${VER_mpfr}.tar.xz" \
 		|| { rm -f $@; exit 1; }
 
 mpfr.done: build/mpfr-${VER_mpfr}.tar.xz gmp.done
@@ -78,8 +80,8 @@ VER_flint=3.5.0
 
 build/flint-${VER_flint}.tar.gz: build/.dir
 	rm -f build/flint*.tar.gz
-	${FETCH} $@ \
-		"https://github.com/flintlib/flint/releases/download/v${VER_flint}/flint-${VER_flint}.tar.gz" \
+	${FETCH} $@ "https://flintlib.org/download/flint-${VER_flint}.tar.gz" \
+		|| ${FETCH} $@ "https://github.com/flintlib/flint/releases/download/v${VER_flint}/flint-${VER_flint}.tar.gz" \
 		|| { rm -f $@; exit 1; }
 
 flint.done: build/flint-${VER_flint}.tar.gz gmp.done mpfr.done
@@ -103,8 +105,8 @@ VER_zlib=1.3.2
 
 build/zlib-${VER_zlib}.tar.gz: build/.dir
 	rm -f build/zlib*.tar.gz
-	${FETCH} $@ \
-		"https://zlib.net/fossils/zlib-${VER_zlib}.tar.gz" \
+	${FETCH} $@ "https://zlib.net/fossils/zlib-${VER_zlib}.tar.gz" \
+		|| ${FETCH} $@ "https://github.com/madler/zlib/releases/download/v${VER_zlib}/zlib-${VER_zlib}.tar.gz" \
 		|| { rm -f $@; exit 1; }
 
 zlib.done: build/zlib-${VER_zlib}.tar.gz
@@ -124,8 +126,7 @@ VER_form=5.0.0
 
 build/form-${VER_form}.tar.gz: build/.dir
 	rm -f build/form*.tar.gz
-	${FETCH} $@ \
-		"https://github.com/form-dev/form/releases/download/v${VER_form}/form-${VER_form}.tar.gz" \
+	${FETCH} $@ "https://github.com/form-dev/form/releases/download/v${VER_form}/form-${VER_form}.tar.gz" \
 		|| { rm -f $@; exit 1; }
 
 form.done: build/form-${VER_form}.tar.gz flint.done gmp.done mpfr.done zlib.done zstd.done
@@ -158,8 +159,7 @@ VER_zstd=1.5.7
 
 build/zstd-${VER_zstd}.tar.gz: build/.dir
 	rm -f build/zstd*.tar.gz
-	${FETCH} $@ \
-		"https://github.com/facebook/zstd/releases/download/v${VER_zstd}/zstd-${VER_zstd}.tar.gz" \
+	${FETCH} $@ "https://github.com/facebook/zstd/releases/download/v${VER_zstd}/zstd-${VER_zstd}.tar.gz" \
 		|| { rm -f $@; exit 1; }
 
 zstd.done: build/zstd-${VER_zstd}.tar.gz zlib.done
