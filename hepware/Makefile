@@ -31,7 +31,7 @@ VER_gmp=6.3.0
 build/gmp-${VER_gmp}.tar.xz: build/.dir
 	rm -f build/gmp*.tar.xz
 	${FETCH} $@ \
-		"https://gmplib.org/download/gmp/gmp-${VER_gmp}.tar.xz" \
+		"https://ftpmirror.gnu.org/gmp/gmp-${VER_gmp}.tar.xz" \
 		|| { rm -f $@; exit 1; }
 
 gmp.done: build/gmp-${VER_gmp}.tar.xz
@@ -55,7 +55,7 @@ VER_mpfr=4.2.2
 build/mpfr-${VER_mpfr}.tar.xz: build/.dir
 	rm -f build/mpfr*.tar.xz
 	${FETCH} $@ \
-		"https://www.mpfr.org/mpfr-${VER_mpfr}/mpfr-${VER_mpfr}.tar.xz" \
+		"https://ftpmirror.gnu.org/mpfr/mpfr-${VER_mpfr}.tar.xz" \
 		|| { rm -f $@; exit 1; }
 
 mpfr.done: build/mpfr-${VER_mpfr}.tar.xz gmp.done
@@ -79,7 +79,7 @@ VER_flint=3.5.0
 build/flint-${VER_flint}.tar.gz: build/.dir
 	rm -f build/flint*.tar.gz
 	${FETCH} $@ \
-		"https://flintlib.org/download/flint-${VER_flint}.tar.gz" \
+		"https://github.com/flintlib/flint/releases/download/v${VER_flint}/flint-${VER_flint}.tar.gz" \
 		|| { rm -f $@; exit 1; }
 
 flint.done: build/flint-${VER_flint}.tar.gz gmp.done mpfr.done
@@ -104,7 +104,7 @@ VER_zlib=1.3.2
 build/zlib-${VER_zlib}.tar.gz: build/.dir
 	rm -f build/zlib*.tar.gz
 	${FETCH} $@ \
-		"http://zlib.net/fossils/zlib-${VER_zlib}.tar.gz" \
+		"https://zlib.net/fossils/zlib-${VER_zlib}.tar.gz" \
 		|| { rm -f $@; exit 1; }
 
 zlib.done: build/zlib-${VER_zlib}.tar.gz
