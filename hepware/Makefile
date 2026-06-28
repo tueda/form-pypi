@@ -7,10 +7,16 @@ clean: phony
 
 phony: ;
 
+ifeq ($(shell uname -s),Darwin)
+GC_SECTIONS_LDFLAG = -Wl,-dead_strip
+else
+GC_SECTIONS_LDFLAG = -Wl,--gc-sections
+endif
+
 DIR = ${CURDIR}
 DEP_CFLAGS = -I${DIR}/include -O3 -fno-omit-frame-pointer -fdata-sections -ffunction-sections ${CFLAGS}
 DEP_FFLAGS = -I${DIR}/include -O3 ${FFLAGS}
-DEP_LDFLAGS = -L${DIR}/lib -Wl,--gc-sections ${LDFLAGS}
+DEP_LDFLAGS = -L${DIR}/lib ${GC_SECTIONS_LDFLAG} ${LDFLAGS}
 
 MAKEOVERRIDES =
 
