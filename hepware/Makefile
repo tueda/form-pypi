@@ -1,6 +1,6 @@
 CC=cc
 CXX=c++
-FETCH=wget --no-use-server-timestamps -qO
+FETCH=curl -fsSL --retry 5 -o
 
 clean: phony
 	rm -rf bin/ build/ include/ lib/ share/ *.done
@@ -26,7 +26,7 @@ build/gmp-${VER_gmp}.tar.xz: build/.dir
 	rm -f build/gmp*.tar.xz
 	${FETCH} $@ \
 		"https://gmplib.org/download/gmp/gmp-${VER_gmp}.tar.xz" \
-		|| rm -f $@
+		|| { rm -f $@; exit 1; }
 
 gmp.done: build/gmp-${VER_gmp}.tar.xz
 	rm -rf build/gmp-*/
@@ -50,7 +50,7 @@ build/mpfr-${VER_mpfr}.tar.xz: build/.dir
 	rm -f build/mpfr*.tar.xz
 	${FETCH} $@ \
 		"https://www.mpfr.org/mpfr-${VER_mpfr}/mpfr-${VER_mpfr}.tar.xz" \
-		|| rm -f $@
+		|| { rm -f $@; exit 1; }
 
 mpfr.done: build/mpfr-${VER_mpfr}.tar.xz gmp.done
 	rm -rf build/mpfr-*/
@@ -74,7 +74,7 @@ build/flint-${VER_flint}.tar.gz: build/.dir
 	rm -f build/flint*.tar.gz
 	${FETCH} $@ \
 		"https://flintlib.org/download/flint-${VER_flint}.tar.gz" \
-		|| rm -f $@
+		|| { rm -f $@; exit 1; }
 
 flint.done: build/flint-${VER_flint}.tar.gz gmp.done mpfr.done
 	rm -rf build/flint-*/
@@ -99,7 +99,7 @@ build/zlib-${VER_zlib}.tar.gz: build/.dir
 	rm -f build/zlib*.tar.gz
 	${FETCH} $@ \
 		"http://zlib.net/fossils/zlib-${VER_zlib}.tar.gz" \
-		|| rm -f $@
+		|| { rm -f $@; exit 1; }
 
 zlib.done: build/zlib-${VER_zlib}.tar.gz
 	rm -rf build/zlib-*/
@@ -120,7 +120,7 @@ build/form-${VER_form}.tar.gz: build/.dir
 	rm -f build/form*.tar.gz
 	${FETCH} $@ \
 		"https://github.com/form-dev/form/releases/download/v${VER_form}/form-${VER_form}.tar.gz" \
-		|| rm -f $@
+		|| { rm -f $@; exit 1; }
 
 form.done: build/form-${VER_form}.tar.gz flint.done gmp.done mpfr.done zlib.done zstd.done
 	rm -rf build/form-*/
@@ -154,7 +154,7 @@ build/zstd-${VER_zstd}.tar.gz: build/.dir
 	rm -f build/zstd*.tar.gz
 	${FETCH} $@ \
 		"https://github.com/facebook/zstd/releases/download/v${VER_zstd}/zstd-${VER_zstd}.tar.gz" \
-		|| rm -f $@
+		|| { rm -f $@; exit 1; }
 
 zstd.done: build/zstd-${VER_zstd}.tar.gz zlib.done
 	rm -rf build/zstd-*/
