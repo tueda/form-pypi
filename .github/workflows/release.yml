@@ -42,7 +42,7 @@ jobs:
         uses: pypa/cibuildwheel@v4.1
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
-          CIBW_BUILD: cp311-${{ matrix.platform }}*
+          CIBW_BUILD: cp310-${{ matrix.platform }}*
 
       - uses: actions/upload-artifact@v7
         with:
