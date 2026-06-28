@@ -94,15 +94,15 @@ flint.done: build/flint-${VER_flint}.tar.gz gmp.done mpfr.done
 
 VER_zlib = 1.3.2
 
-build/zlib-${VER_zlib}.tar.xz: build/.dir
-	rm -f build/zlib*.tar.xz
+build/zlib-${VER_zlib}.tar.gz: build/.dir
+	rm -f build/zlib*.tar.gz
 	${FETCH} $@ \
 		"http://zlib.net/fossils/zlib-${VER_zlib}.tar.gz" \
 		|| rm -f $@
 
-zlib.done: build/zlib-${VER_zlib}.tar.xz
+zlib.done: build/zlib-${VER_zlib}.tar.gz
 	rm -rf build/zlib-*/
-	cd build && tar xf zlib-${VER_zlib}.tar.xz
+	cd build && tar xf zlib-${VER_zlib}.tar.gz
 	cd build/zlib-*/ && \
 		env CC="${CC}" CXX="${CXX}" CFLAGS="${DEP_CFLAGS}" \
 		./configure \
