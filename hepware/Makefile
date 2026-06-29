@@ -7,10 +7,27 @@ clean: phony
 
 phony: ;
 
-ifeq ($(shell uname -s),Darwin)
+UNAME_S := $(shell uname -s)
+UNAME_M := $(shell uname -m)
+
+ifeq ($(UNAME_S),Darwin)
 GC_SECTIONS_LDFLAG = -Wl,-dead_strip
 else
 GC_SECTIONS_LDFLAG = -Wl,--gc-sections
+endif
+
+ifeq ($(UNAME_S),Linux)
+FORM_LIBS = -pthread
+else
+FORM_LIBS =
+endif
+
+ifeq ($(UNAME_S)-$(UNAME_M),Darwin-x86_64)
+GMP_CONFIGURE_FLAGS = --with-pic
+FLINT_CONFIGURE_FLAGS = --disable-gmp-internals --disable-mpfr-check
+else
+GMP_CONFIGURE_FLAGS =
+FLINT_CONFIGURE_FLAGS =
 endif
 
 DIR = ${CURDIR}
@@ -44,7 +61,8 @@ gmp.done: build/gmp-${VER_gmp}.tar.xz
 		./configure \
 		--prefix="${DIR}" --libdir="${DIR}/lib" \
 		--includedir="${DIR}/include" --bindir="${DIR}/bin" \
-		--enable-static --disable-shared --enable-cxx
+		--enable-static --disable-shared --enable-cxx \
+		${GMP_CONFIGURE_FLAGS}
 	+${MAKE} -C build/gmp-*/
 	+${MAKE} -C build/gmp-*/ install
 	date >$@
@@ -92,6 +110,7 @@ flint.done: build/flint-${VER_flint}.tar.gz gmp.done mpfr.done
 		./configure \
 		--prefix="${DIR}" --enable-static --disable-shared \
 		CC="${CC}" CXX="${CXX}" CFLAGS="${DEP_CFLAGS} -Wno-deprecated-declarations -Wmissing-prototypes -Wno-stringop-overflow -Wno-stringop-overread -Werror=implicit-function-declaration -Wall -std=c11 -pedantic -O3" \
+		${FLINT_CONFIGURE_FLAGS} \
 		--with-gmp="${DIR}" \
 		--with-mpfr="${DIR}"
 	+${MAKE} -C build/flint-*/ V=1
@@ -132,7 +151,7 @@ form.done: build/form-${VER_form}.tar.gz flint.done gmp.done mpfr.done zlib.done
 	rm -rf build/form-*/
 	cd build && tar xf form-${VER_form}.tar.gz
 	cd build/form-*/ && \
-		env CC="${CC}" CXX="${CXX}" CFLAGS="${DEP_CFLAGS} -g" CXXFLAGS="${DEP_CFLAGS} -g" LDFLAGS="${DEP_LDFLAGS}" \
+		env CC="${CC}" CXX="${CXX}" CFLAGS="${DEP_CFLAGS} -g" CXXFLAGS="${DEP_CFLAGS} -g" LDFLAGS="${DEP_LDFLAGS}" LIBS="${FORM_LIBS}" \
 		./configure \
 		--prefix="${DIR}" --libdir="${DIR}/lib" \
 		--includedir="${DIR}/include" --bindir="${DIR}/bin" \
