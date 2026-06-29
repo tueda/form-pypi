@@ -167,7 +167,8 @@ form.done: build/form-${VER_form}.tar.gz flint.done gmp.done mpfr.done zlib.done
 			--with-gmp="${DIR}" \
 			--with-mpfr="${DIR}" \
 			--with-zlib="${DIR}" \
-			--with-zstd="${DIR}"
+			--with-zstd="${DIR}" \
+		|| { cat config.log; exit 1; }
 	+${MAKE} -C build/form-*/
 	+${MAKE} -C build/form-*/ install
 	date >$@
