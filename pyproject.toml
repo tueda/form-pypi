@@ -1,6 +1,6 @@
 [project]
-name = "form-bin"
-version = "5.0.0a4"
+name = "testform-bin"
+version = "5.0.0a5"
 description = "The FORM project for symbolic manipulation of very big expressions"
 readme = "README.md"
 license = "GPL-3.0-or-later"

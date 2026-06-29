@@ -66,14 +66,14 @@ jobs:
   pypi-publish:
     name: Upload release to PyPI
     needs: [build-wheels, build-sdist]
-    if: github.repository_owner == 'form-dev' && startsWith(github.ref, 'refs/tags/v')
+    if: github.repository_owner == 'tueda' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       contents: write
       id-token: write
     environment:
-      name: pypi
-      url: https://pypi.org/p/form-bin
+      name: testpypi
+      url: https://test.pypi.org/p/testform-bin
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v8
@@ -84,6 +84,8 @@ jobs:
 
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
 
       - name: Create empty GitHub release
         uses: softprops/action-gh-release@v3
