@@ -23,11 +23,11 @@ FORM_LIBS=
 endif
 
 ifeq ($(UNAME_S)-$(UNAME_M),Darwin-x86_64)
-FLINT_GMP_INTERNALS_FLAGS=--disable-gmp-internals
-FLINT_MPFR_CHECK_FLAGS=--disable-mpfr-check
+GMP_CONFIGURE_FLAGS=--with-pic
+FLINT_CONFIGURE_FLAGS=--disable-gmp-internals --disable-mpfr-check
 else
-FLINT_GMP_INTERNALS_FLAGS=
-FLINT_MPFR_CHECK_FLAGS=
+GMP_CONFIGURE_FLAGS=
+FLINT_CONFIGURE_FLAGS=
 endif
 
 DIR=${CURDIR}
@@ -61,7 +61,8 @@ gmp.done: build/gmp-${VER_gmp}.tar.xz
 		./configure \
 			--prefix="${DIR}" --libdir="${DIR}/lib" \
 			--includedir="${DIR}/include" --bindir="${DIR}/bin" \
-			--enable-static --disable-shared --enable-cxx
+			--enable-static --disable-shared --enable-cxx \
+			${GMP_CONFIGURE_FLAGS}
 	+${MAKE} -C build/gmp-*/
 	+${MAKE} -C build/gmp-*/ install
 	date >$@
@@ -109,8 +110,7 @@ flint.done: build/flint-${VER_flint}.tar.gz gmp.done mpfr.done
 		./configure \
 			--prefix="${DIR}" --enable-static --disable-shared \
 			CC="${CC}" CXX="${CXX}" CFLAGS="${DEP_CFLAGS} -Wno-deprecated-declarations -Wmissing-prototypes -Wno-stringop-overflow -Wno-stringop-overread -Werror=implicit-function-declaration -Wall -std=c11 -pedantic -O3" \
-			${FLINT_GMP_INTERNALS_FLAGS} \
-			${FLINT_MPFR_CHECK_FLAGS} \
+			${FLINT_CONFIGURE_FLAGS} \
 			--with-gmp="${DIR}" \
 			--with-mpfr="${DIR}"
 	+${MAKE} -C build/flint-*/ V=1
