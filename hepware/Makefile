@@ -24,8 +24,10 @@ endif
 
 ifeq ($(UNAME_S)-$(UNAME_M),Darwin-x86_64)
 FLINT_GMP_INTERNALS_FLAGS=--disable-gmp-internals
+FLINT_MPFR_CHECK_FLAGS=--disable-mpfr-check
 else
 FLINT_GMP_INTERNALS_FLAGS=
+FLINT_MPFR_CHECK_FLAGS=
 endif
 
 DIR=${CURDIR}
@@ -108,6 +110,7 @@ flint.done: build/flint-${VER_flint}.tar.gz gmp.done mpfr.done
 			--prefix="${DIR}" --enable-static --disable-shared \
 			CC="${CC}" CXX="${CXX}" CFLAGS="${DEP_CFLAGS} -Wno-deprecated-declarations -Wmissing-prototypes -Wno-stringop-overflow -Wno-stringop-overread -Werror=implicit-function-declaration -Wall -std=c11 -pedantic -O3" \
 			${FLINT_GMP_INTERNALS_FLAGS} \
+			${FLINT_MPFR_CHECK_FLAGS} \
 			--with-gmp="${DIR}" \
 			--with-mpfr="${DIR}"
 	+${MAKE} -C build/flint-*/ V=1
