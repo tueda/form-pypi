@@ -1,0 +1,55 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-illegal-windows-names
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-vcs-permalinks
+      - id: check-yaml
+      - id: destroyed-symlinks
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.20
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+        types_or: [python, scons]
+      - id: ruff-format
+        types_or: [python, scons]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v2.1.0
+    hooks:
+      - id: mypy
+        args: []
+        types_or: [python, scons]
+        additional_dependencies: [packaging==26.2, types-toml==0.10.8.20260518]
+
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: v2.25.1
+    hooks:
+      - id: pyproject-fmt
+
+  - repo: https://github.com/lyz-code/yamlfix
+    rev: 1.19.1
+    hooks:
+      - id: yamlfix
+
+  - repo: https://github.com/EbodShojaei/bake
+    rev: v1.4.6
+    hooks:
+      - id: mbake-format
+
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: 3.6.1
+    hooks:
+      - id: editorconfig-checker

@@ -1,14 +1,16 @@
-import enscons
 import os
-import packaging.tags
-import subprocess
-import sys
-import toml
 
-def get_universal_platform_tag():
+import enscons
+import packaging.tags
+import toml
+from SCons.Script import Environment, File, FindSourceFiles
+
+
+def get_universal_platform_tag() -> str:
     """Return the wheel tag for universal Python 3, but specific platform."""
     tag = next(packaging.tags.sys_tags())
     return f"py3-none-{tag.platform}"
+
 
 pyproject = toml.load("pyproject.toml")
 
@@ -16,7 +18,7 @@ env = Environment(
     tools=["default", "packaging", enscons.generate],
     PACKAGE_METADATA=pyproject["project"],
     WHEEL_TAG=get_universal_platform_tag(),
-    ENV=os.environ
+    ENV=os.environ,
 )
 
 hepware_form = env.Command(
