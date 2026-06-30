@@ -41,10 +41,14 @@ files = [
 platformlib = env.Whl("platlib", files, root="")
 bdist = env.WhlFile(source=platformlib)
 
+File("PKG-INFO")
+# Work around an enscons 0.30.0 issue where the sdist target_prefix
+# uses the unnormalised package name.
 # FindSourceFiles() will list every source file of every target
 # defined so far.
-File("PKG-INFO")
-sdist = env.SDist(source=FindSourceFiles())
+sdist_env = env.Clone()
+sdist_env["PACKAGE_NAME"] = sdist_env["PACKAGE_NAME_SAFE"]
+sdist = sdist_env.SDist(source=FindSourceFiles())
 
 env.Alias("dist", sdist + bdist)
 env.Alias("bdist", bdist)
