@@ -12,6 +12,15 @@ def get_universal_platform_tag() -> str:
     return f"py3-none-{tag.platform}"
 
 
+def get_make_job_count() -> int:
+    """Return the number of parallel jobs to use when running make."""
+    process_cpu_count = getattr(os, "process_cpu_count", None)  # Python 3.13+
+    count = None
+    if process_cpu_count:
+        count = process_cpu_count()
+    return count or os.cpu_count() or 1
+
+
 pyproject = toml.load("pyproject.toml")
 
 env = Environment(
@@ -24,7 +33,7 @@ env = Environment(
 hepware_form = env.Command(
     ["hepware/form.done", "hepware/bin/tform"],
     ["hepware/Makefile"],
-    "make -C hepware -j6 form.done",
+    f"make -C hepware -j{get_make_job_count()} form.done",
 )
 
 files = [
