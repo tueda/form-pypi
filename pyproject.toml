@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "enscons.api"
-requires = [ "enscons~=0.30", "packaging>=20.9", "toml~=0.10" ]
+requires = [ "enscons~=0.30.0", "packaging>=20.9", "toml~=0.10.2" ]
 
 [project]
 name = "form-bin"
