@@ -32,7 +32,10 @@ repos:
       - id: mypy
         args: []
         types_or: [python, scons]
-        additional_dependencies: [packaging==26.2, types-toml==0.10.8.20260518]
+        additional_dependencies:
+          - packaging==26.2
+          - setuptools_scm==10.2.0
+          - types-toml==0.10.8.20260518
 
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: v2.25.1
