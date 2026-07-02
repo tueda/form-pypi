@@ -157,7 +157,7 @@ form.done: build/form-${VER_form}.tar.gz flint.done gmp.done mpfr.done zlib.done
 		--includedir="${DIR}/include" --bindir="${DIR}/bin" \
 		--enable-scalar=yes \
 		--enable-threaded=yes \
-		--enable-debug=yes \
+		--enable-debug=no \
 		--enable-parform=no \
 		--enable-float=yes \
 		--enable-static-link=no \
