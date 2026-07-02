@@ -4,6 +4,7 @@ import enscons
 import packaging.tags
 import toml
 from SCons.Script import Environment, File, FindSourceFiles
+from setuptools_scm import get_version
 
 
 def get_universal_platform_tag() -> str:
@@ -22,10 +23,13 @@ def get_make_job_count() -> int:
 
 
 pyproject = toml.load("pyproject.toml")
+metadata = pyproject["project"]
+metadata["version"] = get_version(root=".", fallback_root=".")
+metadata.pop("dynamic")
 
 env = Environment(
     tools=["default", "packaging", enscons.generate],
-    PACKAGE_METADATA=pyproject["project"],
+    PACKAGE_METADATA=metadata,
     WHEEL_TAG=get_universal_platform_tag(),
     ENV=os.environ,
 )
