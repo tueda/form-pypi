@@ -45,6 +45,7 @@ jobs:
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_BUILD: cp310-${{ matrix.platform }}*
+          CIBW_TEST_COMMAND: form-bin -vv
 
       - name: Upload wheels
         uses: actions/upload-artifact@v7
