@@ -75,7 +75,10 @@ jobs:
   publish:
     name: Upload release to PyPI
     needs: [build-wheels, build-sdist]
-    if: github.repository_owner == 'form-dev' && startsWith(github.ref, 'refs/tags/v')
+    if: >-
+      github.repository_owner == 'form-dev'
+      && github.event_name == 'push'
+      && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       id-token: write
