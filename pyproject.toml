@@ -40,6 +40,10 @@ lint.ignore = [
   "PTH",     # for now
 ]
 
+[tool.check-wheel-contents]
+toplevel = [ "form_bin", "form-packages" ]
+ignore = [ "W010" ]
+
 [tool.pyproject-fmt]
 keep_full_version = true
 max_supported_python = "3.15"
