@@ -72,11 +72,34 @@ jobs:
           name: artifacts-sdist
           path: dist/*.tar.gz
 
+  check-dist:
+    name: Check distributions
+    needs: [build-wheels, build-sdist]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: artifacts-*
+          merge-multiple: true
+          path: dist
+
+      - name: Check distributions
+        run: |
+          python -m pip install --upgrade check-wheel-contents twine
+          twine check --strict dist/*
+          check-wheel-contents dist/*.whl
+
   publish:
     name: Upload release to PyPI
-    needs: [build-wheels, build-sdist]
+    needs: [check-dist]
     if: >-
-      github.repository_owner == 'form-dev'
+      github.repository == 'form-dev/form-pypi'
       && github.event_name == 'push'
       && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
@@ -95,3 +118,5 @@ jobs:
 
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          verify-metadata: false  # already verified by twine check --strict
