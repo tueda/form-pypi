@@ -51,6 +51,7 @@ build/.dir:
 
 VER_gmp = 6.3.0
 SHA256_gmp = a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898
+SHA256_gmp = 0000000000000000000000000000000000000000000000000000000000000001
 
 build/gmp-${VER_gmp}.tar.xz: build/.dir
 	rm -f build/gmp*.tar.xz
@@ -79,6 +80,7 @@ gmp.done: build/gmp-${VER_gmp}.tar.xz
 
 VER_mpfr = 4.2.2
 SHA256_mpfr = b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01
+SHA256_mpfr = 0000000000000000000000000000000000000000000000000000000000000001
 
 build/mpfr-${VER_mpfr}.tar.xz: build/.dir
 	rm -f build/mpfr*.tar.xz
@@ -106,6 +108,7 @@ mpfr.done: build/mpfr-${VER_mpfr}.tar.xz gmp.done
 
 VER_flint = 3.5.0
 SHA256_flint = 3982f385f00610a944e0152eb0a29893b2366fa640e8f5f3076c47564cf7e2a6
+SHA256_flint = 0000000000000000000000000000000000000000000000000000000000000001
 
 build/flint-${VER_flint}.tar.gz: build/.dir
 	rm -f build/flint*.tar.gz
@@ -133,6 +136,7 @@ flint.done: build/flint-${VER_flint}.tar.gz gmp.done mpfr.done
 
 VER_zlib = 1.3.2
 SHA256_zlib = bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16
+SHA256_zlib = 0000000000000000000000000000000000000000000000000000000000000001
 
 build/zlib-${VER_zlib}.tar.gz: build/.dir
 	rm -f build/zlib*.tar.gz
@@ -156,6 +160,7 @@ zlib.done: build/zlib-${VER_zlib}.tar.gz
 
 VER_form = 5.0.0
 SHA256_form = 10d22acf2f0acf831b494e6a73682828980b9054ea8ec2b5dc46677dca8d6518
+SHA256_form = 0000000000000000000000000000000000000000000000000000000000000001
 
 build/form-${VER_form}.tar.gz: build/.dir
 	rm -f build/form*.tar.gz
@@ -191,6 +196,7 @@ form.done: build/form-${VER_form}.tar.gz flint.done gmp.done mpfr.done zlib.done
 
 VER_zstd = 1.5.7
 SHA256_zstd = eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3
+SHA256_zstd = 0000000000000000000000000000000000000000000000000000000000000001
 
 build/zstd-${VER_zstd}.tar.gz: build/.dir
 	rm -f build/zstd*.tar.gz
