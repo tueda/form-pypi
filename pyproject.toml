@@ -42,7 +42,7 @@ lint.ignore = [
 
 [tool.check-wheel-contents]
 toplevel = [ "form_bin", "form-packages" ]
-ignore = [ "W010" ]
+ignore = [ "W010" ]  # form-packages is a placeholder directory containing no Python modules.
 
 [tool.pyproject-fmt]
 keep_full_version = true
