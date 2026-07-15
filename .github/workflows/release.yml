@@ -56,6 +56,7 @@ jobs:
         with:
           name: artifacts-wheels-${{ matrix.platform }}-${{ matrix.arch }}
           path: ./wheelhouse/*.whl
+          if-no-files-found: error
 
   build-sdist:
     name: Build source distribution
@@ -75,6 +76,7 @@ jobs:
         with:
           name: artifacts-sdist
           path: dist/*.tar.gz
+          if-no-files-found: error
 
   check-dist:
     name: Check distributions
