@@ -52,6 +52,7 @@ build/gmp-${VER_gmp}.tar.xz: build/.dir
 		|| ${FETCH} $@ "https://ftp.gnu.org/gnu/gmp/gmp-${VER_gmp}.tar.xz" \
 		|| ${FETCH} $@ "https://gmplib.org/download/gmp/gmp-${VER_gmp}.tar.xz" \
 		|| { rm -f $@; exit 1; }
+	{ echo "${SHA256_gmp}  $@" | sha256sum -c -; } || { rm -f $@; exit 1; }
 
 gmp.done: build/gmp-${VER_gmp}.tar.xz
 	rm -rf build/gmp-*/
@@ -79,6 +80,7 @@ build/mpfr-${VER_mpfr}.tar.xz: build/.dir
 		|| ${FETCH} $@ "https://ftp.gnu.org/gnu/mpfr/mpfr-${VER_mpfr}.tar.xz" \
 		|| ${FETCH} $@ "https://www.mpfr.org/mpfr-${VER_mpfr}/mpfr-${VER_mpfr}.tar.xz" \
 		|| { rm -f $@; exit 1; }
+	{ echo "${SHA256_mpfr}  $@" | sha256sum -c -; } || { rm -f $@; exit 1; }
 
 mpfr.done: build/mpfr-${VER_mpfr}.tar.xz gmp.done
 	rm -rf build/mpfr-*/
@@ -104,6 +106,7 @@ build/flint-${VER_flint}.tar.gz: build/.dir
 	${FETCH} $@ "https://flintlib.org/download/flint-${VER_flint}.tar.gz" \
 		|| ${FETCH} $@ "https://github.com/flintlib/flint/releases/download/v${VER_flint}/flint-${VER_flint}.tar.gz" \
 		|| { rm -f $@; exit 1; }
+	{ echo "${SHA256_flint}  $@" | sha256sum -c -; } || { rm -f $@; exit 1; }
 
 flint.done: build/flint-${VER_flint}.tar.gz gmp.done mpfr.done
 	rm -rf build/flint-*/
@@ -130,6 +133,7 @@ build/zlib-${VER_zlib}.tar.gz: build/.dir
 	${FETCH} $@ "https://zlib.net/fossils/zlib-${VER_zlib}.tar.gz" \
 		|| ${FETCH} $@ "https://github.com/madler/zlib/releases/download/v${VER_zlib}/zlib-${VER_zlib}.tar.gz" \
 		|| { rm -f $@; exit 1; }
+	{ echo "${SHA256_zlib}  $@" | sha256sum -c -; } || { rm -f $@; exit 1; }
 
 zlib.done: build/zlib-${VER_zlib}.tar.gz
 	rm -rf build/zlib-*/
@@ -151,6 +155,7 @@ build/form-${VER_form}.tar.gz: build/.dir
 	rm -f build/form*.tar.gz
 	${FETCH} $@ "https://github.com/form-dev/form/releases/download/v${VER_form}/form-${VER_form}.tar.gz" \
 		|| { rm -f $@; exit 1; }
+	{ echo "${SHA256_form}  $@" | sha256sum -c -; } || { rm -f $@; exit 1; }
 
 form.done: build/form-${VER_form}.tar.gz flint.done gmp.done mpfr.done zlib.done zstd.done
 	rm -rf build/form-*/
@@ -185,6 +190,7 @@ build/zstd-${VER_zstd}.tar.gz: build/.dir
 	rm -f build/zstd*.tar.gz
 	${FETCH} $@ "https://github.com/facebook/zstd/releases/download/v${VER_zstd}/zstd-${VER_zstd}.tar.gz" \
 		|| { rm -f $@; exit 1; }
+	{ echo "${SHA256_zstd}  $@" | sha256sum -c -; } || { rm -f $@; exit 1; }
 
 zstd.done: build/zstd-${VER_zstd}.tar.gz zlib.done
 	rm -rf build/zstd-*/
