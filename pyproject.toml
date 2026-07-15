@@ -1,3 +1,7 @@
+[build-system]
+build-backend = "enscons.api"
+requires = [ "enscons~=0.30", "packaging>=20.9", "toml~=0.10" ]
+
 [project]
 name = "form-bin"
 version = "5.0.0a4"
@@ -5,19 +9,49 @@ description = "The FORM project for symbolic manipulation of very big expression
 readme = "README.md"
 license = "GPL-3.0-or-later"
 requires-python = ">=3.10"
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
+]
+urls.discussions = "https://github.com/form-dev/form/discussions"
+urls.documentation = "https://form-dev.github.io/form-docs/stable/manual/"
+urls.homepage = "https://www.nikhef.nl/~form"
+urls.issues = "https://github.com/form-dev/form/issues"
+urls.source = "https://github.com/form-dev/form"
+urls.wiki = "https://github.com/form-dev/form/wiki"
+scripts.form = "form_bin.__main__:main"
+scripts.form-bin = "form_bin.__main__:main"
 
-[project.urls]
-homepage = "https://www.nikhef.nl/~form"
-source = "https://github.com/form-dev/form"
-documentation = "https://form-dev.github.io/form-docs/stable/manual/"
-issues = "https://github.com/form-dev/form/issues"
-wiki = "https://github.com/form-dev/form/wiki"
-discussions = "https://github.com/form-dev/form/discussions"
+[tool.ruff]
+target-version = "py310"
+extend-include = [ "SConstruct" ]
+lint.select = [ "ALL" ]
+lint.ignore = [
+  "COM812",  # missing-trailing-comma, incompatible with formatter
+  "D",       # for now
+  "D203",    # incorrect-blank-line-before-class, incompatible with D211
+  "D213",    # multi-line-summary-second-line, incompatible with D212
+  "PLC0415", # for now
+  "PTH",     # for now
+]
 
-[build-system]
-requires = ["enscons~=0.30", "toml~=0.10", "packaging>=20.9"]
-build-backend = "enscons.api"
+[tool.pyproject-fmt]
+keep_full_version = true
+max_supported_python = "3.15"
 
-[project.scripts]
-"form" = "form_bin.__main__:main"
-"form-bin" = "form_bin.__main__:main"
+[tool.mypy]
+python_version = "3.10"
+warn_unreachable = true
+strict = true
+pretty = true
+overrides = [ { module = [ "enscons", "SCons.*" ], ignore_missing_imports = true } ]
+show_error_codes = true
+
+[tool.yamlfix]
+explicit_start = false
+whitelines = 1
