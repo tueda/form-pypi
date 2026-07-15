@@ -101,9 +101,26 @@ jobs:
           twine check --strict dist/*
           check-wheel-contents dist/*.whl
 
+  test-sdist:
+    name: Test source distribution
+    needs: [build-sdist]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: artifacts-sdist
+          path: dist
+
+      - name: Install source distribution
+        run: python -m pip install dist/*.tar.gz
+
+      - name: Test installed package
+        run: form-bin -vv
+
   publish:
     name: Upload release to PyPI
-    needs: [check-dist]
+    needs: [check-dist, test-sdist]
     if: >-
       github.repository == 'form-dev/form-pypi'
       && github.event_name == 'push'
