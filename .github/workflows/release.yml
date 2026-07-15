@@ -91,6 +91,7 @@ jobs:
         with:
           pattern: artifacts-*
           merge-multiple: true
+          path: dist
 
       - name: Check distributions
         run: |
@@ -102,7 +103,7 @@ jobs:
     name: Upload release to PyPI
     needs: [check-dist]
     if: >-
-      github.repository_owner == 'form-dev'
+      github.repository == 'form-dev/form-pypi'
       && github.event_name == 'push'
       && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
