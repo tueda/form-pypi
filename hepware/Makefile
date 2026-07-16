@@ -1,6 +1,12 @@
 CC = cc
 CXX = c++
-FETCH = wget --no-use-server-timestamps -qO
+FETCH = curl -fsSL --retry 5 -o
+
+ifeq ($(UNAME_S),Darwin)
+SHA256_CHECK = shasum -a 256 -c -
+else
+SHA256_CHECK = sha256sum -c -
+endif
 
 clean: phony
 	rm -rf bin/ build/ include/ lib/ share/ *.done
@@ -21,12 +27,15 @@ build/.dir:
 ## GMP
 
 VER_gmp = 6.3.0
+SHA256_gmp = a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898
 
 build/gmp-${VER_gmp}.tar.xz: build/.dir
 	rm -f build/gmp*.tar.xz
-	${FETCH} $@ \
-		"https://gmplib.org/download/gmp/gmp-${VER_gmp}.tar.xz" \
-		|| rm -f $@
+	${FETCH} $@ "https://ftpmirror.gnu.org/gmp/gmp-${VER_gmp}.tar.xz" \
+		|| ${FETCH} $@ "https://ftp.gnu.org/gnu/gmp/gmp-${VER_gmp}.tar.xz" \
+		|| ${FETCH} $@ "https://gmplib.org/download/gmp/gmp-${VER_gmp}.tar.xz" \
+		|| { rm -f $@; exit 1; }
+	{ echo "${SHA256_gmp}  $@" | ${SHA256_CHECK}; } || { rm -f $@; exit 1; }
 
 gmp.done: build/gmp-${VER_gmp}.tar.xz
 	rm -rf build/gmp-*/
@@ -45,12 +54,15 @@ gmp.done: build/gmp-${VER_gmp}.tar.xz
 ## MPFR
 
 VER_mpfr = 4.2.2
+SHA256_mpfr = b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01
 
 build/mpfr-${VER_mpfr}.tar.xz: build/.dir
 	rm -f build/mpfr*.tar.xz
-	${FETCH} $@ \
-		"https://www.mpfr.org/mpfr-${VER_mpfr}/mpfr-${VER_mpfr}.tar.xz" \
-		|| rm -f $@
+	${FETCH} $@ "https://ftpmirror.gnu.org/mpfr/mpfr-${VER_mpfr}.tar.xz" \
+		|| ${FETCH} $@ "https://ftp.gnu.org/gnu/mpfr/mpfr-${VER_mpfr}.tar.xz" \
+		|| ${FETCH} $@ "https://www.mpfr.org/mpfr-${VER_mpfr}/mpfr-${VER_mpfr}.tar.xz" \
+		|| { rm -f $@; exit 1; }
+	{ echo "${SHA256_mpfr}  $@" | ${SHA256_CHECK}; } || { rm -f $@; exit 1; }
 
 mpfr.done: build/mpfr-${VER_mpfr}.tar.xz gmp.done
 	rm -rf build/mpfr-*/
@@ -69,12 +81,14 @@ mpfr.done: build/mpfr-${VER_mpfr}.tar.xz gmp.done
 ## Flint
 
 VER_flint = 3.5.0
+SHA256_flint = 3982f385f00610a944e0152eb0a29893b2366fa640e8f5f3076c47564cf7e2a6
 
 build/flint-${VER_flint}.tar.gz: build/.dir
 	rm -f build/flint*.tar.gz
-	${FETCH} $@ \
-		"https://flintlib.org/download/flint-${VER_flint}.tar.gz" \
-		|| rm -f $@
+	${FETCH} $@ "https://flintlib.org/download/flint-${VER_flint}.tar.gz" \
+		|| ${FETCH} $@ "https://github.com/flintlib/flint/releases/download/v${VER_flint}/flint-${VER_flint}.tar.gz" \
+		|| { rm -f $@; exit 1; }
+	{ echo "${SHA256_flint}  $@" | ${SHA256_CHECK}; } || { rm -f $@; exit 1; }
 
 flint.done: build/flint-${VER_flint}.tar.gz gmp.done mpfr.done
 	rm -rf build/flint-*/
@@ -93,12 +107,14 @@ flint.done: build/flint-${VER_flint}.tar.gz gmp.done mpfr.done
 ## zlib
 
 VER_zlib = 1.3.2
+SHA256_zlib = bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16
 
 build/zlib-${VER_zlib}.tar.gz: build/.dir
 	rm -f build/zlib*.tar.gz
-	${FETCH} $@ \
-		"http://zlib.net/fossils/zlib-${VER_zlib}.tar.gz" \
-		|| rm -f $@
+	${FETCH} $@ "https://zlib.net/fossils/zlib-${VER_zlib}.tar.gz" \
+		|| ${FETCH} $@ "https://github.com/madler/zlib/releases/download/v${VER_zlib}/zlib-${VER_zlib}.tar.gz" \
+		|| { rm -f $@; exit 1; }
+	{ echo "${SHA256_zlib}  $@" | ${SHA256_CHECK}; } || { rm -f $@; exit 1; }
 
 zlib.done: build/zlib-${VER_zlib}.tar.gz
 	rm -rf build/zlib-*/
@@ -114,12 +130,13 @@ zlib.done: build/zlib-${VER_zlib}.tar.gz
 ## FORM
 
 VER_form = 5.0.0
+SHA256_form = 10d22acf2f0acf831b494e6a73682828980b9054ea8ec2b5dc46677dca8d6518
 
 build/form-${VER_form}.tar.gz: build/.dir
 	rm -f build/form*.tar.gz
-	${FETCH} $@ \
-		"https://github.com/form-dev/form/releases/download/v${VER_form}/form-${VER_form}.tar.gz" \
-		|| rm -f $@
+	${FETCH} $@ "https://github.com/form-dev/form/releases/download/v${VER_form}/form-${VER_form}.tar.gz" \
+		|| { rm -f $@; exit 1; }
+	{ echo "${SHA256_form}  $@" | ${SHA256_CHECK}; } || { rm -f $@; exit 1; }
 
 form.done: build/form-${VER_form}.tar.gz flint.done gmp.done mpfr.done zlib.done zstd.done
 	rm -rf build/form-*/
@@ -148,12 +165,13 @@ form.done: build/form-${VER_form}.tar.gz flint.done gmp.done mpfr.done zlib.done
 ## Zstd
 
 VER_zstd = 1.5.7
+SHA256_zstd = eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3
 
 build/zstd-${VER_zstd}.tar.gz: build/.dir
 	rm -f build/zstd*.tar.gz
-	${FETCH} $@ \
-		"https://github.com/facebook/zstd/releases/download/v${VER_zstd}/zstd-${VER_zstd}.tar.gz" \
-		|| rm -f $@
+	${FETCH} $@ "https://github.com/facebook/zstd/releases/download/v${VER_zstd}/zstd-${VER_zstd}.tar.gz" \
+		|| { rm -f $@; exit 1; }
+	{ echo "${SHA256_zstd}  $@" | ${SHA256_CHECK}; } || { rm -f $@; exit 1; }
 
 zstd.done: build/zstd-${VER_zstd}.tar.gz zlib.done
 	rm -rf build/zstd-*/
