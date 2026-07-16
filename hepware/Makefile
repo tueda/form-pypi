@@ -2,10 +2,10 @@ CC = cc
 CXX = c++
 FETCH = curl -fsSL --retry 5 -o
 
-clean: phony
-	rm -rf bin/ build/ include/ lib/ share/ *.done
+.PHONY: clean
 
-phony: ;
+clean:
+	rm -rf bin/ build/ include/ lib/ share/ *.done
 
 UNAME_S := $(shell uname -s)
 UNAME_M := $(shell uname -m)
