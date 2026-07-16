@@ -2,12 +2,6 @@ CC = cc
 CXX = c++
 FETCH = curl -fsSL --retry 5 -o
 
-ifeq ($(UNAME_S),Darwin)
-SHA256_CHECK = shasum -a 256 -c -
-else
-SHA256_CHECK = sha256sum -c -
-endif
-
 clean: phony
 	rm -rf bin/ build/ include/ lib/ share/ *.done
 
@@ -15,6 +9,12 @@ phony: ;
 
 UNAME_S := $(shell uname -s)
 UNAME_M := $(shell uname -m)
+
+ifeq ($(UNAME_S),Darwin)
+SHA256_CHECK = shasum -a 256 -c -
+else
+SHA256_CHECK = sha256sum -c -
+endif
 
 ifeq ($(UNAME_S),Darwin)
 GC_SECTIONS_LDFLAG = -Wl,-dead_strip
