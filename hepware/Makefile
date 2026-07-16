@@ -2,10 +2,10 @@ CC = cc
 CXX = c++
 FETCH = wget --no-use-server-timestamps -qO
 
-clean: phony
-	rm -rf bin/ build/ include/ lib/ share/ *.done
+.PHONY: clean
 
-phony: ;
+clean:
+	rm -rf bin/ build/ include/ lib/ share/ *.done
 
 DIR = ${CURDIR}
 DEP_CFLAGS = -I${DIR}/include -O3 -fno-omit-frame-pointer -fdata-sections -ffunction-sections ${CFLAGS}
