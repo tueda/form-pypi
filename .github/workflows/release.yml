@@ -95,6 +95,26 @@ jobs:
           merge-multiple: true
           path: dist
 
+      - name: List distribution contents
+        run: |
+          for file in dist/*; do
+            echo
+            echo "$file"
+            echo '------------------------------------------------------------------------'
+            case "$file" in
+              *.tar.gz)
+                tar -tf "$file"
+                ;;
+              *.whl)
+                zipinfo -1 "$file"
+                ;;
+              *)
+                echo "error: unknown file type: $file" >&2
+                exit 1
+                ;;
+            esac
+          done
+
       - name: Check distributions
         run: |
           pipx run twine check --strict dist/*
