@@ -9,7 +9,7 @@ License file: form/COPYING
 Name: GNU MP
 Website: https://gmplib.org
 Repository: https://gmplib.org/repo/gmp/
-License: LGPL-3.0-only
+License: LGPL-3.0-later
 License files: gmp/COPYINGv3, gmp/COPYING.LESSERv3
 
 Name: GNU MPFR
