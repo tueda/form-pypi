@@ -215,49 +215,51 @@ zstd.done: build/zstd-${VER_zstd}.tar.gz zlib.done
 
 ## License files
 
+LICENSE_STAMP_DIR = build/stamps/licenses
+
 LICENSE_STAMPS = \
-	build/licenses/LICENSES_bundled.done \
-	build/licenses/form.done \
-	build/licenses/gmp.done \
-	build/licenses/mpfr.done \
-	build/licenses/flint.done \
-	build/licenses/zlib.done \
-	build/licenses/zstd.done
+	${LICENSE_STAMP_DIR}/LICENSES_bundled.done \
+	${LICENSE_STAMP_DIR}/form.done \
+	${LICENSE_STAMP_DIR}/gmp.done \
+	${LICENSE_STAMP_DIR}/mpfr.done \
+	${LICENSE_STAMP_DIR}/flint.done \
+	${LICENSE_STAMP_DIR}/zlib.done \
+	${LICENSE_STAMP_DIR}/zstd.done
 
 licenses.done: ${LICENSE_STAMPS}
 	date >$@
 
-build/licenses/LICENSES_bundled.done: LICENSES_bundled.txt
-	mkdir -p build/licenses
+${LICENSE_STAMP_DIR}/LICENSES_bundled.done: LICENSES_bundled.txt
+	mkdir -p ${@D} build/licenses
 	cp LICENSES_bundled.txt build/licenses/
 	date >$@
 
-build/licenses/form.done: build/form-${VER_form}.tar.gz
-	mkdir -p build/licenses/form
+${LICENSE_STAMP_DIR}/form.done: build/form-${VER_form}.tar.gz
+	mkdir -p ${@D} build/licenses/form
 	tar -xf $< -C build/licenses/form --strip-components=1 form-${VER_form}/COPYING
 	date >$@
 
-build/licenses/gmp.done: build/gmp-${VER_gmp}.tar.xz
-	mkdir -p build/licenses/gmp
+${LICENSE_STAMP_DIR}/gmp.done: build/gmp-${VER_gmp}.tar.xz
+	mkdir -p ${@D} build/licenses/gmp
 	tar -xf $< -C build/licenses/gmp --strip-components=1 gmp-${VER_gmp}/COPYINGv3 gmp-${VER_gmp}/COPYING.LESSERv3
 	date >$@
 
-build/licenses/mpfr.done: build/mpfr-${VER_mpfr}.tar.xz
-	mkdir -p build/licenses/mpfr
+${LICENSE_STAMP_DIR}/mpfr.done: build/mpfr-${VER_mpfr}.tar.xz
+	mkdir -p ${@D} build/licenses/mpfr
 	tar -xf $< -C build/licenses/mpfr --strip-components=1 mpfr-${VER_mpfr}/COPYING mpfr-${VER_mpfr}/COPYING.LESSER
 	date >$@
 
-build/licenses/flint.done: build/flint-${VER_flint}.tar.gz
-	mkdir -p build/licenses/flint
+${LICENSE_STAMP_DIR}/flint.done: build/flint-${VER_flint}.tar.gz
+	mkdir -p ${@D} build/licenses/flint
 	tar -xf $< -C build/licenses/flint --strip-components=1 flint-${VER_flint}/COPYING flint-${VER_flint}/COPYING.LESSER
 	date >$@
 
-build/licenses/zlib.done: build/zlib-${VER_zlib}.tar.gz
-	mkdir -p build/licenses/zlib
+${LICENSE_STAMP_DIR}/zlib.done: build/zlib-${VER_zlib}.tar.gz
+	mkdir -p ${@D} build/licenses/zlib
 	tar -xf $< -C build/licenses/zlib --strip-components=1 zlib-${VER_zlib}/LICENSE
 	date >$@
 
-build/licenses/zstd.done: build/zstd-${VER_zstd}.tar.gz
-	mkdir -p build/licenses/zstd
+${LICENSE_STAMP_DIR}/zstd.done: build/zstd-${VER_zstd}.tar.gz
+	mkdir -p ${@D} build/licenses/zstd
 	tar -xf $< -C build/licenses/zstd --strip-components=1 zstd-${VER_zstd}/LICENSE
 	date >$@
