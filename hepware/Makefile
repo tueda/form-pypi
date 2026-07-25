@@ -216,6 +216,7 @@ zstd.done: build/zstd-${VER_zstd}.tar.gz zlib.done
 ## License files
 
 LICENSE_STAMPS = \
+	build/licenses/LICENSES_bundled.done \
 	build/licenses/form.done \
 	build/licenses/gmp.done \
 	build/licenses/mpfr.done \
@@ -224,6 +225,11 @@ LICENSE_STAMPS = \
 	build/licenses/zstd.done
 
 licenses.done: ${LICENSE_STAMPS}
+	date >$@
+
+build/licenses/LICENSES_bundled.done: LICENSES_bundled.txt
+	mkdir -p build/licenses
+	cp LICENSES_bundled.txt build/licenses/
 	date >$@
 
 build/licenses/form.done: build/form-${VER_form}.tar.gz

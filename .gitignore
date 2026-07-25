@@ -230,4 +230,5 @@ form_bin/tform
 form_bin/tform.exe
 PKG-INFO
 /hepware/*
+!/hepware/LICENSES_bundled.txt
 !/hepware/Makefile
