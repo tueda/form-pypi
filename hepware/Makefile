@@ -212,3 +212,54 @@ zstd.done: build/zstd-${VER_zstd}.tar.gz zlib.done
 	cd build/zstd-*/zlibWrapper/ && cp -a libzstd_zlibwrapper.a "${DIR}/lib/"
 	cd build/zstd-*/zlibWrapper/ && cp -a zstd_zlibwrapper.h "${DIR}/include/"
 	date >$@
+
+## License files
+
+LICENSE_STAMP_DIR = build/stamps/licenses
+
+LICENSE_STAMPS = \
+	${LICENSE_STAMP_DIR}/LICENSES_bundled.done \
+	${LICENSE_STAMP_DIR}/form.done \
+	${LICENSE_STAMP_DIR}/gmp.done \
+	${LICENSE_STAMP_DIR}/mpfr.done \
+	${LICENSE_STAMP_DIR}/flint.done \
+	${LICENSE_STAMP_DIR}/zlib.done \
+	${LICENSE_STAMP_DIR}/zstd.done
+
+licenses.done: ${LICENSE_STAMPS}
+	date >$@
+
+${LICENSE_STAMP_DIR}/LICENSES_bundled.done: LICENSES_bundled.txt
+	mkdir -p ${@D} build/licenses
+	cp LICENSES_bundled.txt build/licenses/
+	date >$@
+
+${LICENSE_STAMP_DIR}/form.done: build/form-${VER_form}.tar.gz
+	mkdir -p ${@D} build/licenses/form
+	tar -xf $< -C build/licenses/form --strip-components=1 form-${VER_form}/COPYING
+	date >$@
+
+${LICENSE_STAMP_DIR}/gmp.done: build/gmp-${VER_gmp}.tar.xz
+	mkdir -p ${@D} build/licenses/gmp
+	tar -xf $< -C build/licenses/gmp --strip-components=1 gmp-${VER_gmp}/COPYINGv3 gmp-${VER_gmp}/COPYING.LESSERv3
+	date >$@
+
+${LICENSE_STAMP_DIR}/mpfr.done: build/mpfr-${VER_mpfr}.tar.xz
+	mkdir -p ${@D} build/licenses/mpfr
+	tar -xf $< -C build/licenses/mpfr --strip-components=1 mpfr-${VER_mpfr}/COPYING mpfr-${VER_mpfr}/COPYING.LESSER
+	date >$@
+
+${LICENSE_STAMP_DIR}/flint.done: build/flint-${VER_flint}.tar.gz
+	mkdir -p ${@D} build/licenses/flint
+	tar -xf $< -C build/licenses/flint --strip-components=1 flint-${VER_flint}/COPYING flint-${VER_flint}/COPYING.LESSER
+	date >$@
+
+${LICENSE_STAMP_DIR}/zlib.done: build/zlib-${VER_zlib}.tar.gz
+	mkdir -p ${@D} build/licenses/zlib
+	tar -xf $< -C build/licenses/zlib --strip-components=1 zlib-${VER_zlib}/LICENSE
+	date >$@
+
+${LICENSE_STAMP_DIR}/zstd.done: build/zstd-${VER_zstd}.tar.gz
+	mkdir -p ${@D} build/licenses/zstd
+	tar -xf $< -C build/licenses/zstd --strip-components=1 zstd-${VER_zstd}/LICENSE
+	date >$@
