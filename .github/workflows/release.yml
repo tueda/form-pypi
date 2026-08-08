@@ -115,6 +115,9 @@ jobs:
             esac
           done
 
+      - name: Check bundled licenses
+        run: ./scripts/check-bundled-licenses.py
+
       - name: Check distributions
         run: |
           pipx run twine check --strict dist/*

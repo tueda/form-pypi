@@ -3,8 +3,21 @@ import os
 import enscons
 import packaging.tags
 import toml
-from SCons.Script import Environment, File, FindSourceFiles
+from SCons.Script import Copy, Environment, File, FindSourceFiles, Mkdir
 from setuptools_scm import get_version
+
+BUNDLED_LICENSE_FILES = [
+    "LICENSES_bundled.txt",
+    "form/COPYING",
+    "gmp/COPYINGv3",
+    "gmp/COPYING.LESSERv3",
+    "mpfr/COPYING",
+    "mpfr/COPYING.LESSER",
+    "flint/COPYING",
+    "flint/COPYING.LESSER",
+    "zlib/LICENSE",
+    "zstd/LICENSE",
+]
 
 
 def get_universal_platform_tag() -> str:
@@ -39,6 +52,14 @@ hepware_form = env.Command(
     ["hepware/Makefile"],
     f"make -C hepware -j{get_make_job_count()} form.done",
 )
+hepware_licenses = env.Command(
+    ["hepware/licenses.done"],
+    ["hepware/Makefile", "hepware/LICENSES_bundled.txt"],
+    f"make -C hepware -j{get_make_job_count()} licenses.done",
+)
+# Independent make invocations do not coordinate their shared archive targets.
+# Run them sequentially, collecting licenses after the FORM build.
+env.Requires(hepware_licenses, hepware_form)
 
 files = [
     File("form-packages/README.md"),
@@ -52,7 +73,21 @@ files = [
 ]
 
 platformlib = env.Whl("platlib", files, root="")
-bdist = env.WhlFile(source=platformlib)
+license_dir = env["DIST_INFO_PATH"].Dir("licenses")
+wheel_licenses = []
+for path in BUNDLED_LICENSE_FILES:
+    target = license_dir.File(path)
+    # Pass the generated path only to Copy(), not as an env.Command() source;
+    # otherwise FindSourceFiles() would include the license texts in the sdist.
+    source_path = f"hepware/build/licenses/{path}"
+    wheel_licenses.extend(
+        env.Command(
+            target,
+            hepware_licenses,
+            [Mkdir(target.dir), Copy(target, source_path)],
+        )
+    )
+bdist = env.WhlFile(source=platformlib + wheel_licenses)
 
 File("PKG-INFO")
 # Work around an enscons 0.30.0 issue where the sdist target_prefix

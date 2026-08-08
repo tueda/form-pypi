@@ -43,7 +43,10 @@ lint.ignore = [
 
 [tool.check-wheel-contents]
 toplevel = [ "form_bin", "form-packages" ]
-ignore = [ "W010" ]  # form-packages is a placeholder directory containing no Python modules.
+ignore = [
+  "W002", # FLINT and MPFR provide identical LGPL license files.
+  "W010", # form-packages is a placeholder directory containing no Python modules.
+]
 
 [tool.pyproject-fmt]
 keep_full_version = true
