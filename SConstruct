@@ -62,6 +62,9 @@ File("PKG-INFO")
 sdist_env = env.Clone()
 sdist_env["PACKAGE_NAME"] = sdist_env["PACKAGE_NAME_SAFE"]
 sdist = sdist_env.SDist(source=FindSourceFiles())
+# setuptools-scm can change the version without changing pyproject.toml.
+# Make SCons regenerate PKG-INFO when the resolved version changes.
+sdist_env.Depends("PKG-INFO", sdist_env.Value(metadata["version"]))
 
 env.Alias("dist", sdist + bdist)
 env.Alias("bdist", bdist)
