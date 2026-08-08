@@ -104,8 +104,8 @@ mpfr.done: build/mpfr-${VER_mpfr}.tar.xz gmp.done
 
 ## Flint
 
-VER_flint = 3.5.0
-SHA256_flint = 3982f385f00610a944e0152eb0a29893b2366fa640e8f5f3076c47564cf7e2a6
+VER_flint = 3.6.0
+SHA256_flint = b95e2c7792f5eea4a1c8d2d42c4098434756832e57a094b295eb5dfdc9b4c36b
 
 build/flint-${VER_flint}.tar.gz: build/.dir
 	rm -f build/flint*.tar.gz
