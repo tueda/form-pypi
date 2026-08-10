@@ -1,18 +1,18 @@
-CC=cc
-CXX=c++
-FETCH=wget --no-use-server-timestamps -qO
+CC = cc
+CXX = c++
+FETCH = wget --no-use-server-timestamps -qO
 
 clean: phony
 	rm -rf bin/ build/ include/ lib/ share/ *.done
 
-phony:;
+phony: ;
 
-DIR=${CURDIR}
-DEP_CFLAGS=-I${DIR}/include -O3 -fno-omit-frame-pointer -fdata-sections -ffunction-sections ${CFLAGS}
-DEP_FFLAGS=-I${DIR}/include -O3 ${FFLAGS}
-DEP_LDFLAGS=-L${DIR}/lib -Wl,--gc-sections ${LDFLAGS}
+DIR = ${CURDIR}
+DEP_CFLAGS = -I${DIR}/include -O3 -fno-omit-frame-pointer -fdata-sections -ffunction-sections ${CFLAGS}
+DEP_FFLAGS = -I${DIR}/include -O3 ${FFLAGS}
+DEP_LDFLAGS = -L${DIR}/lib -Wl,--gc-sections ${LDFLAGS}
 
-MAKEOVERRIDES=
+MAKEOVERRIDES =
 
 build/.dir:
 	mkdir -p bin build include lib share
@@ -20,7 +20,7 @@ build/.dir:
 
 ## GMP
 
-VER_gmp=6.3.0
+VER_gmp = 6.3.0
 
 build/gmp-${VER_gmp}.tar.xz: build/.dir
 	rm -f build/gmp*.tar.xz
@@ -35,16 +35,16 @@ gmp.done: build/gmp-${VER_gmp}.tar.xz
 	cd build/gmp-*/ && \
 		env CC="${CC}" CXX="${CXX}" CFLAGS="-std=c11 ${DEP_CFLAGS}" CXXFLAGS="${DEP_CFLAGS}" LDFLAGS="${DEP_LDFLAGS}" \
 		./configure \
-			--prefix="${DIR}" --libdir="${DIR}/lib" \
-			--includedir="${DIR}/include" --bindir="${DIR}/bin" \
-			--enable-static --disable-shared --enable-cxx
+		--prefix="${DIR}" --libdir="${DIR}/lib" \
+		--includedir="${DIR}/include" --bindir="${DIR}/bin" \
+		--enable-static --disable-shared --enable-cxx
 	+${MAKE} -C build/gmp-*/
 	+${MAKE} -C build/gmp-*/ install
 	date >$@
 
 ## MPFR
 
-VER_mpfr=4.2.2
+VER_mpfr = 4.2.2
 
 build/mpfr-${VER_mpfr}.tar.xz: build/.dir
 	rm -f build/mpfr*.tar.xz
@@ -58,17 +58,17 @@ mpfr.done: build/mpfr-${VER_mpfr}.tar.xz gmp.done
 	cd build/mpfr-*/ && \
 		env CC="${CC}" CXX="${CXX}" CFLAGS="${DEP_CFLAGS}" CXXFLAGS="${DEP_CFLAGS}" LDFLAGS="${DEP_LDFLAGS}" \
 		./configure \
-			--prefix="${DIR}" --libdir="${DIR}/lib" \
-			--includedir="${DIR}/include" --bindir="${DIR}/bin" \
-			--enable-static --disable-shared --enable-thread-safe \
-			--with-gmp="${DIR}"
+		--prefix="${DIR}" --libdir="${DIR}/lib" \
+		--includedir="${DIR}/include" --bindir="${DIR}/bin" \
+		--enable-static --disable-shared --enable-thread-safe \
+		--with-gmp="${DIR}"
 	+${MAKE} -C build/mpfr-*/
 	+${MAKE} -C build/mpfr-*/ install
 	date >$@
 
 ## Flint
 
-VER_flint=3.5.0
+VER_flint = 3.5.0
 
 build/flint-${VER_flint}.tar.gz: build/.dir
 	rm -f build/flint*.tar.gz
@@ -82,18 +82,17 @@ flint.done: build/flint-${VER_flint}.tar.gz gmp.done mpfr.done
 	cd build/flint-*/ && mv config/configfsf.guess config/config.guess
 	cd build/flint-*/ && \
 		./configure \
-			--prefix="${DIR}" --enable-static --disable-shared \
-			CC="${CC}" CXX="${CXX}" CFLAGS="${DEP_CFLAGS} -Wno-deprecated-declarations -Wmissing-prototypes -Wno-stringop-overflow -Wno-stringop-overread -Werror=implicit-function-declaration -Wall -std=c11 -pedantic -O3" \
-			--with-gmp="${DIR}" \
-			--with-mpfr="${DIR}"
+		--prefix="${DIR}" --enable-static --disable-shared \
+		CC="${CC}" CXX="${CXX}" CFLAGS="${DEP_CFLAGS} -Wno-deprecated-declarations -Wmissing-prototypes -Wno-stringop-overflow -Wno-stringop-overread -Werror=implicit-function-declaration -Wall -std=c11 -pedantic -O3" \
+		--with-gmp="${DIR}" \
+		--with-mpfr="${DIR}"
 	+${MAKE} -C build/flint-*/ V=1
 	+${MAKE} -C build/flint-*/ install
 	date >$@
 
-
 ## zlib
 
-VER_zlib=1.3.2
+VER_zlib = 1.3.2
 
 build/zlib-${VER_zlib}.tar.xz: build/.dir
 	rm -f build/zlib*.tar.xz
@@ -107,14 +106,14 @@ zlib.done: build/zlib-${VER_zlib}.tar.xz
 	cd build/zlib-*/ && \
 		env CC="${CC}" CXX="${CXX}" CFLAGS="${DEP_CFLAGS}" \
 		./configure \
-			--prefix="${DIR}" --static
+		--prefix="${DIR}" --static
 	+${MAKE} -C build/zlib-*/
 	+${MAKE} -C build/zlib-*/ install
 	date >$@
 
 ## FORM
 
-VER_form=5.0.0
+VER_form = 5.0.0
 
 build/form-${VER_form}.tar.gz: build/.dir
 	rm -f build/form*.tar.gz
@@ -128,27 +127,27 @@ form.done: build/form-${VER_form}.tar.gz flint.done gmp.done mpfr.done zlib.done
 	cd build/form-*/ && \
 		env CC="${CC}" CXX="${CXX}" CFLAGS="${DEP_CFLAGS} -g" CXXFLAGS="${DEP_CFLAGS} -g" LDFLAGS="${DEP_LDFLAGS}" \
 		./configure \
-			--prefix="${DIR}" --libdir="${DIR}/lib" \
-			--includedir="${DIR}/include" --bindir="${DIR}/bin" \
-			--enable-scalar=yes \
-			--enable-threaded=yes \
-			--enable-debug=yes \
-			--enable-parform=no \
-			--enable-float=yes \
-			--enable-static-link=no \
-			--enable-native=no \
-			--with-flint="${DIR}" \
-			--with-gmp="${DIR}" \
-			--with-mpfr="${DIR}" \
-			--with-zlib="${DIR}" \
-			--with-zstd="${DIR}"
+		--prefix="${DIR}" --libdir="${DIR}/lib" \
+		--includedir="${DIR}/include" --bindir="${DIR}/bin" \
+		--enable-scalar=yes \
+		--enable-threaded=yes \
+		--enable-debug=yes \
+		--enable-parform=no \
+		--enable-float=yes \
+		--enable-static-link=no \
+		--enable-native=no \
+		--with-flint="${DIR}" \
+		--with-gmp="${DIR}" \
+		--with-mpfr="${DIR}" \
+		--with-zlib="${DIR}" \
+		--with-zstd="${DIR}"
 	+${MAKE} -C build/form-*/
 	+${MAKE} -C build/form-*/ install
 	date >$@
 
 ## Zstd
 
-VER_zstd=1.5.7
+VER_zstd = 1.5.7
 
 build/zstd-${VER_zstd}.tar.gz: build/.dir
 	rm -f build/zstd*.tar.gz
@@ -160,7 +159,7 @@ zstd.done: build/zstd-${VER_zstd}.tar.gz zlib.done
 	rm -rf build/zstd-*/
 	cd build && tar xf zstd-${VER_zstd}.tar.gz
 	@# build libzstd.a, libastd_zlibwrapper.a, and zstd
-	+${MAKE} -C build/zstd-*/lib/ CC=${CC} CXX=${CXX} CFLAGS="${DEP_CFLAGS}" LDFLAGS="${DEP_LDFLAGS}" VERBOSE=1 libzstd.a-release-nomt 
+	+${MAKE} -C build/zstd-*/lib/ CC=${CC} CXX=${CXX} CFLAGS="${DEP_CFLAGS}" LDFLAGS="${DEP_LDFLAGS}" VERBOSE=1 libzstd.a-release-nomt
 	+${MAKE} -C build/zstd-*/programs/ CC=${CC} CXX=${CXX} CFLAGS="${DEP_CFLAGS}" LDFLAGS="${DEP_LDFLAGS}" VERBOSE=1 HAVE_ZLIB=no HAVE_LZMA=no HAVE_LZ4=no zstd-nomt
 	+${MAKE} -C build/zstd-*/zlibWrapper/ CC=${CC} CXX=${CXX} CFLAGS="${DEP_CFLAGS} -DZWRAP_USE_ZSTD=1" LDFLAGS="${DEP_LDFLAGS}" VERBOSE=1 zstd_zlibwrapper.o gzclose.o gzlib.o gzread.o gzwrite.o
 	cd build/zstd-*/zlibWrapper/ && ${AR} rcs libzstd_zlibwrapper.a zstd_zlibwrapper.o gzclose.o gzlib.o gzread.o gzwrite.o
