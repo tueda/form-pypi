@@ -29,6 +29,7 @@ files = [
     File("form-packages/README.md"),
     File("form_bin/__init__.py"),
     File("form_bin/__main__.py"),
+    File("form_bin/py.typed"),
     env.Command(
         "form_bin/tform",
         [hepware_form],
