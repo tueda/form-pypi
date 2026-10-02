@@ -14,7 +14,10 @@ def _form_cmd() -> list[str]:
     packages = os.path.join(os.path.dirname(this_dir), "form-packages")
     if not packages.endswith(os.path.sep):
         packages += os.path.sep
-    form_path = os.path.join(this_dir, "tform")
+    tform_bin = "tform"
+    if os.name == "nt":
+        tform_bin += ".exe"
+    form_path = os.path.join(this_dir, tform_bin)
     tmp_dir = tempfile.gettempdir()
     form_tmp = os.environ.get("FORMTMP", tmp_dir)
     form_tmpsort = os.environ.get("FORMTMPSORT", tmp_dir)

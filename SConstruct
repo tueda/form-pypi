@@ -47,8 +47,10 @@ env = Environment(
     ENV=os.environ,
 )
 
+tform_bin = "tform.exe" if os.name == "nt" else "tform"
+
 hepware_form = env.Command(
-    ["hepware/form.done", "hepware/bin/tform"],
+    ["hepware/form.done", f"hepware/bin/{tform_bin}"],
     ["hepware/Makefile"],
     f"make -C hepware -j{get_make_job_count()} form.done",
 )
@@ -67,9 +69,9 @@ files = [
     File("form_bin/__main__.py"),
     File("form_bin/py.typed"),
     env.Command(
-        "form_bin/tform",
+        f"form_bin/{tform_bin}",
         [hepware_form],
-        ["cp hepware/bin/tform form_bin/tform", "strip form_bin/tform"],
+        [Copy("$TARGET", f"hepware/bin/{tform_bin}"), 'strip "$TARGET"'],
     ),
 ]
 
