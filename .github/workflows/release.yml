@@ -74,7 +74,8 @@ jobs:
       - name: Build binaries on MSYS2
         if: runner.os == 'Windows'
         shell: msys2 {0}
-        run: make -C hepware -j"$(nproc)" form.done licenses.done
+        run: make -C hepware -j"$(nproc)" FORM_CONFIGURE_ARGS="--with-api=windows"
+          form.done licenses.done
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v4.2
@@ -82,8 +83,6 @@ jobs:
           CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_BUILD: cp310-${{ matrix.platform }}*
           CIBW_TEST_COMMAND: form-bin -vv
-          CIBW_ENVIRONMENT_WINDOWS: >-
-            FORM_CONFIGURE_ARGS="--with-api=windows"
 
       - name: Upload wheels
         uses: actions/upload-artifact@v7
