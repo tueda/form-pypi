@@ -47,7 +47,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Set up MSYS2
+      - name: Set up MSYS2 (Windows)
         if: runner.os == 'Windows'
         id: msys2
         uses: msys2/setup-msys2@v2
@@ -60,7 +60,7 @@ jobs:
             mingw-w64-ucrt-x86_64-gcc
 
       # https://www.msys2.org/docs/symlinks/#known-issues
-      - name: Work around MSYS2 tar symlinks
+      - name: Work around MSYS2 tar symlinks (Windows)
         if: runner.os == 'Windows'
         shell: msys2 {0}
         run: |
@@ -71,7 +71,7 @@ jobs:
           EOF
           chmod +x /usr/local/bin/tar
 
-      - name: Build binaries on MSYS2
+      - name: Build binaries on MSYS2 (Windows)
         if: runner.os == 'Windows'
         shell: msys2 {0}
         run: make -C hepware -j"$(nproc)" FORM_CONFIGURE_ARGS="--with-api=windows"
@@ -83,6 +83,7 @@ jobs:
           CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_BUILD: cp310-${{ matrix.platform }}*
           CIBW_TEST_COMMAND: form-bin -vv
+          CIBW_ENVIRONMENT_WINDOWS: FORM_CONFIGURE_ARGS="--with-api=windows"
 
       - name: Upload wheels
         uses: actions/upload-artifact@v7
