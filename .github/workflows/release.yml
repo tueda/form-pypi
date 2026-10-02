@@ -37,6 +37,9 @@ jobs:
           - os: macos-15
             platform: macos
             arch: arm64
+          - os: windows-2022
+            platform: win
+            arch: AMD64
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -44,12 +47,27 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Set up MSYS2
+        if: runner.os == 'Windows'
+        id: msys2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+
+      - name: Build hepware
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: make -C hepware -j"$(nproc)" form.done licenses.done
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v4.2
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_BUILD: cp310-${{ matrix.platform }}*
           CIBW_TEST_COMMAND: form-bin -vv
+          CIBW_ENVIRONMENT_WINDOWS: >-
+            FORM_CONFIGURE_ARGS="--with-api=windows"
 
       - name: Upload wheels
         uses: actions/upload-artifact@v7
