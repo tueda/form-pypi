@@ -56,6 +56,7 @@ jobs:
           update: true
           install: >-
             m4
+            make
             mingw-w64-ucrt-x86_64-gcc
 
       # https://github.com/msys2/MSYS2-packages/issues/1216
