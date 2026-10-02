@@ -82,9 +82,9 @@ jobs:
             FORM_CONFIGURE_ARGS="--with-api=windows"
           MSYS2_LOCATION: ${{ steps.msys2.outputs.msys2-location }}
           CIBW_BEFORE_BUILD_WINDOWS: >-
-            echo "MSYS2_LOCATION: $MSYS2_LOCATION" &&
-            echo "PATH: $PATH" &&
-            echo "FORM_CONFIGURE_ARGS: $FORM_CONFIGURE_ARGS" &&
+            echo "MSYS2_LOCATION: %MSYS2_LOCATION%" &&
+            echo "PATH: %PATH%" &&
+            echo "FORM_CONFIGURE_ARGS: %FORM_CONFIGURE_ARGS%" &&
             where cc &&
             cc --version &&
             cc -print-prog-name=ld &&
