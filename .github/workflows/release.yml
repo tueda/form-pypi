@@ -59,6 +59,18 @@ jobs:
             make
             mingw-w64-ucrt-x86_64-gcc
 
+      # https://www.msys2.org/docs/symlinks/#known-issues
+      - name: Work around MSYS2 tar symlinks
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: |
+          mkdir -p /usr/local/bin
+          cat >/usr/local/bin/tar <<'EOF'
+          #!/usr/bin/bash
+          /usr/bin/bsdtar "$@" || exec /usr/bin/bsdtar "$@"
+          EOF
+          chmod +x /usr/local/bin/tar
+
       - name: Build binaries on MSYS2
         if: runner.os == 'Windows'
         shell: msys2 {0}
