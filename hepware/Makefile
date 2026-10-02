@@ -157,6 +157,8 @@ zlib.done: build/zlib-${VER_zlib}.tar.gz
 VER_form = 5.0.2
 SHA256_form = 90a3fbc31a31de50a181e63ce222d0224642a5916fdbb25373913558a6d6921a
 
+FORM_CONFIGURE_ARGS ?=
+
 build/form-${VER_form}.tar.gz: build/.dir
 	rm -f build/form*.tar.gz
 	${FETCH} $@ "https://github.com/form-dev/form/releases/download/v${VER_form}/form-${VER_form}.tar.gz" \
@@ -182,7 +184,8 @@ form.done: build/form-${VER_form}.tar.gz flint.done gmp.done mpfr.done zlib.done
 		--with-gmp="${DIR}" \
 		--with-mpfr="${DIR}" \
 		--with-zlib="${DIR}" \
-		--with-zstd="${DIR}"
+		--with-zstd="${DIR}" \
+		${FORM_CONFIGURE_ARGS}
 	+${MAKE} -C build/form-*/
 	+${MAKE} -C build/form-*/ install
 	date >$@
