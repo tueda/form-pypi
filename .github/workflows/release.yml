@@ -37,6 +37,9 @@ jobs:
           - os: macos-15
             platform: macos
             arch: arm64
+          - os: windows-2022
+            platform: win
+            arch: AMD64
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -44,12 +47,39 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Set up MSYS2
+        if: runner.os == 'Windows'
+        id: msys2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            mingw-w64-ucrt-x86_64-gcc
+
+      # https://github.com/msys2/MSYS2-packages/issues/1216
+      # https://www.msys2.org/docs/symlinks/#known-issues
+      - name: Work around MSYS2 tar symlinks
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: |
+          mkdir -p /usr/local/bin
+          cat >/usr/local/bin/tar <<'EOF'
+          #!/usr/bin/bash
+          /usr/bin/tar "$@" || exec /usr/bin/tar "$@"
+          EOF
+          chmod +x /usr/local/bin/tar
+
       - name: Build wheels
         uses: pypa/cibuildwheel@v4.2
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
           CIBW_BUILD: cp310-${{ matrix.platform }}*
           CIBW_TEST_COMMAND: form-bin -vv
+          MSYS2_LOCATION: ${{ steps.msys2.outputs.msys2-location }}
+          CIBW_ENVIRONMENT_WINDOWS: >-
+            PATH="$MSYS2_LOCATION\ucrt64\bin;$MSYS2_LOCATION\usr\bin;$PATH"
+            FORM_CONFIGURE_ARGS="--with-api=windows"
 
       - name: Upload wheels
         uses: actions/upload-artifact@v7
