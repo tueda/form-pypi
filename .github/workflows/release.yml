@@ -78,7 +78,7 @@ jobs:
           CIBW_BUILD: cp310-${{ matrix.platform }}*
           CIBW_TEST_COMMAND: form-bin -vv
           CIBW_ENVIRONMENT_WINDOWS: >-
-            PATH="$MSYS2_LOCATION\usr\local\bin;$MSYS2_LOCATION\ucrt64\bin;$MSYS2_LOCATION\usr\bin;$PATH"
+            PATH="$MSYS2_LOCATION\\usr\\local\\bin;$MSYS2_LOCATION\\ucrt64\\bin;$MSYS2_LOCATION\\usr\\bin;$PATH"
             FORM_CONFIGURE_ARGS="--with-api=windows"
           MSYS2_LOCATION: ${{ steps.msys2.outputs.msys2-location }}
           CIBW_BEFORE_BUILD_WINDOWS: >-
